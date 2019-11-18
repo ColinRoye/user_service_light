@@ -5,6 +5,7 @@ var UserServiceSchema2 = new mongoose.Schema({
      email: {
           type: String,
           unique: true,
+	  uniqueCaseInsensitive: true
      },
      following: {type: [String], default: []},
      followers: {type: [String], default: []},

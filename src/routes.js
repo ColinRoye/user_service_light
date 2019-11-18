@@ -56,8 +56,15 @@ router.get('/user/:username/following', async (req, res, next)=>{
 router.get('/user/:username', async (req, res, next)=>{
      debug.log("INPUT: /user/:username: " + JSON.stringify(req.params));
      //debug.log("OUTPUT:" + (await service.getOrCreateUserByUsername(req.params.username)));
-
-     res.send((await service.getOrCreateUserByUsername(req.params.username)));
+     console.log("RQ USER/USERNAME: " + JSON.stringify(req.body));
+     let ret = ((await service.getOrCreateUserByUsername(req.params.username)));
+     console.log("RET USER/USERNAME: " + JSON.stringify(ret)); 
+     if(ret.status == env.statusError){
+        ret.status.error = "anything"
+        res.status("400").send(ret)
+     } else{
+       res.send(ret);
+     }
 });
 router.get('/user/:username/posts', async (req, res, next)=>{
      debug.log("INPUT: /user/:username/posts" + JSON.stringify(req.params))
@@ -96,8 +103,13 @@ router.post('/follow', async (req, res, next)=>{
           ret.status = env.statusError;
      }
      debug.log("test");
-     res.send(ret)
-
+     //res.send(ret)
+     if(ret.status == env.statusError){
+        ret.status.error = "anything"
+        res.status("400").send(ret.status)
+     } else{
+       res.send(ret.status);
+     }
 });
 
 
