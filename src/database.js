@@ -7,9 +7,9 @@ const debug = require("./debug");
 
 module.exports = {
   getUserByEmail: async (email) => {
-    return await User.findOne({
+    return await User.find({
       email: email
-    })
+    }).limit(1)
   },
   addUser: async (email) => {
     let user = new User;
@@ -30,12 +30,12 @@ module.exports = {
     debug.log("FOLLOW_DATABASE: followname " + followname)
 
 
-    let user = await User.findOne({
+    let user = await User.find({
       email: userEmail
-    });
-    let followsUser = await User.findOne({
+    }).limit(1);
+    let followsUser = await User.find({
       email: followsUserEmail
-    });
+    }).limit(1);
 
     if (!user) {
       debug.log("FOLLOW_DATABASE: user NOT defined")
