@@ -6,10 +6,6 @@ const env = require("./env");
 const service = require("./services");
 const axios = require("axios");
 
-var apicache = require('apicache')
-var cache = apicache.middleware
-
-apicache.clear()
 
 let getPosts = async (username, limit) => {
   if (!limit) {
@@ -26,7 +22,7 @@ let getPosts = async (username, limit) => {
 }
 
 
-router.get('/user/:username/followers', cache('2 minutes'), async (req, res, next) => {
+router.get('/user/:username/followers', async (req, res, next) => {
   debug.log("INPUT: /user/:username/followers " + JSON.stringify(req.params))
   let followers = (await service.getOrCreateUserByUsername(req.params.username, "arr")).user.followers
   let temp = [];
@@ -44,7 +40,7 @@ router.get('/user/:username/followers', cache('2 minutes'), async (req, res, nex
     status: "OK"
   })
 });
-router.get('/user/:username/following', cache('2 minutes'), async (req, res, next) => {
+router.get('/user/:username/following', async (req, res, next) => {
   debug.log("INPUT: /user/:username/following " + JSON.stringify(req.params))
   let following = (await service.getOrCreateUserByUsername(req.params.username, "arr")).user.following
   let temp = [];
@@ -62,7 +58,7 @@ router.get('/user/:username/following', cache('2 minutes'), async (req, res, nex
     status: "OK"
   })
 });
-router.get('/user/:username', cache('2 minutes'), async (req, res, next) => {
+router.get('/user/:username', async (req, res, next) => {
   debug.log("INPUT: /user/:username: " + JSON.stringify(req.params));
   //debug.log("OUTPUT:" + (await service.getOrCreateUserByUsername(req.params.username)));
   console.log("RQ USER/USERNAME: " + JSON.stringify(req.body));
@@ -75,7 +71,7 @@ router.get('/user/:username', cache('2 minutes'), async (req, res, next) => {
     res.send(ret);
   }
 });
-router.get('/user/:username/posts', cache('2 minutes'), async (req, res, next) => {
+router.get('/user/:username/posts', async (req, res, next) => {
   debug.log("INPUT: /user/:username/posts" + JSON.stringify(req.params))
   debug.log("LIMIT: " + req.query.limit)
   res.send((await getPosts(req.params.username, req.query.limit)).data);
